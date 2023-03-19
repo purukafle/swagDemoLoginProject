@@ -20,6 +20,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class LoginToSauceDemo {
+
 	private WebDriver driver;
 	private SwagLabsLoginPage loginPage;
 	public String url = "https://www.saucedemo.com/";
