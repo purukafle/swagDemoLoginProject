@@ -10,58 +10,53 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import com.pages.SuccessLoginPage;
-import com.pages.SwagLabsMainPage;
+import com.pages.SwagLabsLoginPage;
 
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class SauceDemoLogin {
+public class LoginToSauceDemo {
 	private WebDriver driver;
-	private SuccessLoginPage loginPage;
-	private SwagLabsMainPage mainpage;
-	
-	public String url="https://www.saucedemo.com/";
-	
-	
+	private SwagLabsLoginPage loginPage;
+	public String url = "https://www.saucedemo.com/";
+
 	@Before
 	public void setUp() {
-		System.setProperty("webdriver.chrome.driver", "src/test/resources/DriverPackage/chromedriver.exe");
-		ChromeOptions options=new ChromeOptions();
-		options.addArguments("--remote-allow-origin");
-		driver=new ChromeDriver(options);
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		System.setProperty("webdriver.chrome.driver", "src/test/resources/webDriver/chromedriver.exe");
+//		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		driver = new ChromeDriver(options);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
 		driver.manage().window().maximize();
-		
 	}
-	
+
+	@After
+
 	public void tearDown(Scenario scenario) {
-		if(scenario.isFailed()) {
-			String testName=scenario.getName();
-			//take a screenshot
-			final byte[] screenshot=((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-			//embeded screenshot into cucumber report
+		if (scenario.isFailed()) {
+			String testName = scenario.getName();
+			// take a screenshot
+			final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+			// embed screenshot into cucumber report
 			scenario.attach(screenshot, "image/png", testName);
 		}
-		if(driver !=null) {
+
+		if (driver != null) {
 			driver.quit();
 		}
-		
-		
-	
-	
 	}
-	
-	
+
 	@Given("I am on the Sauce Demo Login Page")
 	public void i_am_on_the_sauce_demo_login_page() {
 		System.out.println("Opening chrome browser");
 		driver.get(url);
-		loginPage = new SuccessLoginPage(driver);
+		loginPage = new SwagLabsLoginPage(driver);
 	}
 
 	@When("I fill the account information for account StandardUser into the Username field and the Password field")
@@ -111,5 +106,4 @@ public class SauceDemoLogin {
 
 	}
 
-	
 }
